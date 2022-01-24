@@ -1,6 +1,22 @@
 from flask import Flask, render_template, request
+from flask_sqlalchemy import SQLAlchemy
 
 app=Flask(__name__) #var to store flask obj instance/app
+#conn db
+app.config['SQLALCHEMY_DATABASE_URI']='postgresql://postgres:eclerx#123@localhost/height_collector_0'
+db=SQLAlchemy(app) #creating sqlalchemy obj for flask app 'app'
+
+class Data(db.Model):
+    __tablename__='data' #creates tbl
+    #creating cols; all vars local vars to ea func
+    id=db.Column(db.Integer, primary_key=True)
+    email_=db.Column(db.String(120), unique=True)
+    height_=db.Column(db.Integer)
+
+    #initialize instance vars
+    def __init__(self, email_, height_):
+        self.email_=email_
+        self.height_=height_
 
 @app.route('/') #home pg
 def index():
