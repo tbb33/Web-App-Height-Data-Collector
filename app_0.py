@@ -30,6 +30,10 @@ def success():
         height=request.form["height_name"]
         print(request.form)
         print(email,height)
+        data=Data(email,height)
+        #Data class create db model obj which recognized by add method of sqlalchemy obj
+        db.session.add(data) #add rows
+        db.session.commit() #commit changes
         return render_template("success.html")
 
 #means if scripts being executed and not imported then execute lines below
