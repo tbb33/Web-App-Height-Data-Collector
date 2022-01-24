@@ -28,13 +28,16 @@ def success():
         #get email/ht from http request
         email=request.form["email_name"] #form tag; stores input into email var
         height=request.form["height_name"]
-        print(request.form)
-        print(email,height)
-        data=Data(email,height)
-        #Data class create db model obj which recognized by add method of sqlalchemy obj
-        db.session.add(data) #add rows
-        db.session.commit() #commit changes
-        return render_template("success.html")
+        #filter data where email=user email
+        if db.session.query(Data).filter(Data.email_==email).count() ==0:
+            data=Data(email,height)
+            #Data class create db model obj which recognized by add method of sqlalchemy obj
+            db.session.add(data) #add rows
+            db.session.commit() #commit changes
+            return render_template("success.html")
+        else:
+            return render_template("index.html",
+            text="We have already received a submission from that email address. Please submit a new email address to continue.")
 
 #means if scripts being executed and not imported then execute lines below
 if __name__=="__main__":
