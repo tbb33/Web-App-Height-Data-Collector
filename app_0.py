@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
+from send_email import send_email
 
 app=Flask(__name__) #var to store flask obj instance/app
 #conn db
@@ -12,7 +13,6 @@ class Data(db.Model):
     id=db.Column(db.Integer, primary_key=True)
     email_=db.Column(db.String(120), unique=True)
     height_=db.Column(db.Integer)
-
     #initialize instance vars
     def __init__(self, email_, height_):
         self.email_=email_
@@ -28,6 +28,7 @@ def success():
         #get email/ht from http request
         email=request.form["email_name"] #form tag; stores input into email var
         height=request.form["height_name"]
+
         #filter data where email=user email
         if db.session.query(Data).filter(Data.email_==email).count() ==0:
             data=Data(email,height)
